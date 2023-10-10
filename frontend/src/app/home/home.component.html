@@ -10,4 +10,9 @@
         More Stats...
       </div>
     </div>
+    <form (ngSubmit)="onSubmit()">
+      <h1>Input Leetcode Question Endpoint</h1>
+      <input type="text" [(ngModel)]="questionEndpoint" name="questionEndpoint" placeholder="Enter endpoint">
+      <button type="submit">Fetch Question</button>
+    </form>
 </div>
