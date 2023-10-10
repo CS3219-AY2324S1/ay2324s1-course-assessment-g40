@@ -23,17 +23,44 @@ mongoose.connect(`mongodb://localhost:27002/question_db`, {
 const HEADERS = {
     'Referer': 'https://leetcode.com/problems',
     'Access-Control-Allow-Origin' : 'http://localhost:8000',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, DELETE',
 };
 const endpoint = "https://leetcode.com/graphql";
 
 exports.handler = async (event) => {
     try {
-        // Change this so that user can pass specific question as input
-        const titleSlug = 'two-sum'; 
+        if (event.httpMethod === 'OPTIONS') {
+            // Respond to preflight requests with a 200 OK status code
+            return {
+              statusCode: 200,
+              headers: {
+                'Access-Control-Allow-Origin': 'http://localhost:8000',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Credentials': 'true',
+              },
+              body: '',
+            };
+        }
+        
+        console.log(event);
+        // Change this to use the input passed from the frontend
+        const { questionEndpoint } = JSON.parse(event.body);
+
+        // Make sure questionEndpoint is not empty
+        if (!questionEndpoint) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ error: 'Invalid input: questionEndpoint is required' }),
+                headers: HEADERS,
+            };
+        }
+
         const query = `
             query questionData {
-                question(titleSlug: "${titleSlug}") {
+                question(titleSlug: "${questionEndpoint}") {
                     title
                     titleSlug
                     content
@@ -67,7 +94,7 @@ exports.handler = async (event) => {
         const responseObj = {
             statusCode: 200,
             body: JSON.stringify({ raw_data }),
-            HEADERS
+            headers: HEADERS
         };
         console.log(responseObj);
 
@@ -78,6 +105,7 @@ exports.handler = async (event) => {
         return {
             statusCode: 500,
             body: 'Failed to fetch question',
+            headers: HEADERS
         };
     }
 };
