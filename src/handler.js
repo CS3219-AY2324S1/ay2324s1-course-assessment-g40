@@ -29,7 +29,7 @@ const HEADERS = {
 };
 const endpoint = "https://leetcode.com/graphql";
 
-module.exports.hello = async (event) => {
+module.exports.getQuestion = async (event) => {
   try {
     // Change this so that user can pass specific question as input
     const titleSlug = 'two-sum'; 
