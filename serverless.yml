@@ -1,0 +1,11 @@
+service: ay2324s1-course-assessment-g40
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  region: ap-southeast-1
+
+functions:
+  hello:
+    handler: src/handler.hello

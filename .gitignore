@@ -11,6 +11,12 @@ node_modules
 npm-debug.log
 yarn-error.log
 
+# package directories
+jspm_packages
+
+# Serverless directories
+.serverless
+
 # MongoDB
 /data
 
@@ -44,3 +50,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Local Netlify folder
+.netlify
