@@ -30,18 +30,33 @@ export class HomeComponent implements OnInit{
 
   onSubmit(): void {
     const headers = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json', // Set the Content-Type header to indicate JSON data
     };
-    // Send an HTTP GET request to your serverless function with the input as a parameter
-    this.http.get('http://localhost:8888/.netlify/functions/fetchQuestions', { headers }).subscribe(
-      (data: any) => {
-        // Handle the response from the serverless function here
-        console.log(data);
-      },
-      (error) => {
-        // Handle any errors here
-        console.error(error);
-      }
-    );
+    // Get the value of questionEndpoint from the input field
+    const questionEndpointValue = this.questionEndpoint.trim();
+  
+    // Check if questionEndpointValue is empty
+    if (!questionEndpointValue) {
+      console.error('Question endpoint is empty');
+      return;
+    }
+  
+    // Create an object with the questionEndpoint as a property
+    const requestData = { questionEndpoint: questionEndpointValue };
+    console.log(requestData);
+
+    // Send an HTTP POST request to your serverless function
+    this.http
+      .post('http://localhost:8888/.netlify/functions/fetchQuestions', requestData, { headers })
+      .subscribe(
+        (data: any) => {
+          // Handle the response from the serverless function here
+          console.log(data);
+        },
+        (error) => {
+          // Handle any errors here
+          console.error(error);
+        }
+      );
   }
 }
