@@ -7,5 +7,6 @@ provider:
   region: ap-southeast-1
 
 functions:
-  hello:
-    handler: src/handler.hello
+  getQuestion:
+    handler: src/handler.getQuestion
+    timeout: 60
