@@ -1,7 +1,6 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
 const db = require('../backend/question-service/models');
-const dbConfig = require("../backend/question-service/config/db.config.js");
 
 // Connect to questions database
 mongoose.connect(`mongodb://localhost:27002/question_db`, {
@@ -28,6 +27,7 @@ const HEADERS = {
     'Access-Control-Allow-Methods': 'POST, OPTIONS, GET, DELETE',
 };
 const endpoint = "https://leetcode.com/graphql";
+let finalData = {};
 
 exports.handler = async (event) => {
     try {
@@ -45,67 +45,89 @@ exports.handler = async (event) => {
             };
         }
         
-        console.log(event);
-        // Change this to use the input passed from the frontend
-        const { questionEndpoint } = JSON.parse(event.body);
+        const requestData = JSON.parse(event.body);
+        const counter = requestData.counter;
 
-        // Make sure questionEndpoint is not empty
-        if (!questionEndpoint) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ error: 'Invalid input: questionEndpoint is required' }),
-                headers: HEADERS,
-            };
+        const response = await axios.get("https://leetcode.com/api/problems/all");
+        const raw_data = response.data;
+
+        const stat_status_pairs = raw_data.stat_status_pairs;
+        const question_title_slug = stat_status_pairs.filter(i => i.paid_only === false).map(i => i.stat.question__title_slug);
+
+        for (let i = 0; i < 10; i++) {
+            try {
+                const query = `
+                    query questionData {
+                        question(titleSlug: "${question_title_slug[counter + i]}") {
+                            questionId
+                            title
+                            titleSlug
+                            content
+                            difficulty
+                            topicTags {
+                                name
+                            }
+                        }
+                    }
+                `;
+
+                const response = await axios.post(
+                    endpoint,
+                    { query },
+                    { headers: HEADERS }
+                );
+        
+                const data = response.data.data.question;
+
+                if (data.topicTags.length > 0) {
+                     // Check if a document with the same titleSlug exists in the database
+                     const existingQuestion = await db.questions.findOne({ questionId: data.titleSlug });
+
+                     if (existingQuestion) {
+                         // Update the existing document with the new data
+                         existingQuestion.questionTitle = data.title;
+                         existingQuestion.questionDescription = data.content;
+                         existingQuestion.questionCategory = data.topicTags[0].name;
+                         existingQuestion.questionComplexity = data.difficulty;
+ 
+                         // Save the updated document
+                         await existingQuestion.save();
+                         console.log(`Updated question: "${question_title_slug[counter + i]}"`);
+                     } else {
+                         // Create a new Question document
+                         const question = new db.questions({
+                             questionId: data.titleSlug,
+                             questionTitle: data.title,
+                             questionDescription: data.content,
+                             questionCategory: data.topicTags[0].name,
+                             questionComplexity: data.difficulty,
+                         });
+ 
+                         // Save the question document to the MongoDB database
+                         console.log(`Added question: "${question_title_slug[counter + i]}"`);
+                         await question.save();
+                     }
+                }
+                
+                finalData[data.questionId] = data;
+            } catch (error) {
+                console.error(`Error fetching data for question "${question_title_slug[counter + i]}":`, error);
+            }
         }
 
-        const query = `
-            query questionData {
-                question(titleSlug: "${questionEndpoint}") {
-                    title
-                    titleSlug
-                    content
-                    difficulty
-                    topicTags {
-                        name
-                    }
-                }
-            }
-        `;
-        const response = await axios.post(endpoint, { query }, { headers: HEADERS });
-        const raw_data = response.data.data.question;
-        
-        // let categories = [];
-        // for (let i = 0; i < raw_data.topicTags.length; i++) {
-        //     categories.push(raw_data.topicTags[i].name);
-        // }
-
-        // Create a new Question document
-        const question = new db.questions({
-            questionId: raw_data.titleSlug,
-            questionTitle: raw_data.title,
-            questionDescription: raw_data.content,
-            questionCategory: raw_data.topicTags[0].name,
-            questionComplexity: raw_data.difficulty,
-        });
-
-        // Save the question document to the MongoDB database
-        await question.save();
-
+        // Create a response object
         const responseObj = {
             statusCode: 200,
-            body: JSON.stringify({ raw_data }),
-            headers: HEADERS
+            body: JSON.stringify({ finalData }),
+            headers: HEADERS,
         };
-        console.log(responseObj);
 
         return responseObj;
     } catch (error) {
-        console.error('Error fetching question:', error);
-        
+        console.error('Error fetching question list:', error);
         return {
             statusCode: 500,
-            body: 'Failed to fetch question',
-            headers: HEADERS
+            body: 'Failed to fetch questions',
         };
     }
 };
