@@ -28,35 +28,46 @@ export class HomeComponent implements OnInit{
     });
   }
 
-  onSubmit(): void {
+  fetchQuestion(): void {
     const headers = {
       'Content-Type': 'application/json', // Set the Content-Type header to indicate JSON data
     };
-    // Get the value of questionEndpoint from the input field
-    const questionEndpointValue = this.questionEndpoint.trim();
-  
-    // Check if questionEndpointValue is empty
-    if (!questionEndpointValue) {
-      console.error('Question endpoint is empty');
-      return;
+
+    let counter = 0;
+
+    let requestData = {
+      counter: counter,
     }
-  
-    // Create an object with the questionEndpoint as a property
-    const requestData = { questionEndpoint: questionEndpointValue };
-    console.log(requestData);
 
     // Send an HTTP POST request to your serverless function
     this.http
       .post('http://localhost:8888/.netlify/functions/fetchQuestions', requestData, { headers })
       .subscribe(
         (data: any) => {
-          // Handle the response from the serverless function here
           console.log(data);
         },
-        (error) => {
-          // Handle any errors here
+        (error: Error) => {
           console.error(error);
         }
       );
+
+    for (let i = 1; i < 30; i++) {
+      let counter = 10 * i;
+
+      let requestData = {
+        counter: counter,
+      }
+
+      this.http
+      .post('http://localhost:8888/.netlify/functions/fetchQuestions', requestData, { headers })
+      .subscribe(
+        (data: any) => {
+          console.log(data);
+        },
+        (error: Error) => {
+          console.error(error);
+        }
+      );
+    }
   }
 }
