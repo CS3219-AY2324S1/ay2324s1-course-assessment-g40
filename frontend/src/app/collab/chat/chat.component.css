@@ -1,14 +1,11 @@
 .chat-box {
   width: 18vw;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: lightgrey;
+  background-color: rgb(171, 209, 238);
 }
 
 .chat-header {
   justify-content: left;
-  background-color: white;
+  background-color: rgb(91, 149, 230);
 }
 
 .chat-log {

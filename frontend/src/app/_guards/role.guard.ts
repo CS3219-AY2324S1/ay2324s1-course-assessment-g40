@@ -12,6 +12,11 @@ export class RoleGuard implements CanActivate  {
     canActivate(): boolean {
         let isExpectedRole = false;
         isExpectedRole = this.storageService.getUser()["roles"].includes("ROLE_ADMIN");
+        if (!isExpectedRole) {
+          this.router.navigate(['/home'])
+          //replace with something better thanks
+          alert("This page does not exist for you!")
+        }
         return isExpectedRole;
     }
 

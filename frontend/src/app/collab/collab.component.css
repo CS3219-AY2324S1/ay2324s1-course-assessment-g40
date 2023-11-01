@@ -8,8 +8,6 @@
   width: 25vw;
   position: relative;
   flex: 1;
-  justify-content: center;
-  align-items: center;
 }
 
 .question-title {

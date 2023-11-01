@@ -4,7 +4,7 @@ module.exports = app => {
   var router = require("express").Router();
 
   // Create a new question
-  router.post("/auth/", questions.create);
+  router.post("/", questions.create);
 
   // Retrieve all questions
   router.get("/all", questions.findAll);
@@ -15,14 +15,17 @@ module.exports = app => {
   // Retrieve a random question with complexity questionComplexity
   router.get("/random/:questionComplexity", questions.findRandomByComplexity);
 
+  // Retrieve questions based on search query
+  router.get("/search/:questionTitle", questions.findAllByCondition);
+
   // Update a question using questionId
-  router.put("/auth/:questionId", questions.update);
+  router.put("/:questionId", questions.update);
 
   // Delete a question using questionId
-  router.delete("/auth/:questionId", questions.delete);
+  router.delete("/:questionId", questions.delete);
 
   // Delete all questions
-  router.delete("/auth/", questions.deleteAll);
+  router.delete("/", questions.deleteAll);
 
   app.use('/question', router);
 };

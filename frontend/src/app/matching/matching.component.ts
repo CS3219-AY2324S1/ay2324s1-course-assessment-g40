@@ -35,11 +35,16 @@ export class MatchingComponent {
         this.getQueueLength()
       })
     }))).subscribe((res) => {
+      console.log(res);
       if (res.message.includes("Matched users:")) {
         this.match = res.message
         this.getQueueLength()
         this.router.navigate(["/collab", res.roomId, res.difficulty, res.language]);
       }
+    }, (err) => {
+      this.match = "We encountered a problem. Please try again later."
+      this.getQueueLength()
+      setTimeout(() => this.requested = false, 15000);
     })
     this.getQueueLength()
   }

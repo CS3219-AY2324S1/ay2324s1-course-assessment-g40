@@ -1,0 +1,10 @@
+<input style="visibility: hidden" value="selected">
+<div class="container" (click)="press()">
+    <p *ngFor="let select of selected">{{select}} <mark (click)="remove(select)">&#10005;</mark></p>
+    <i class="arrow down"></i>
+</div>
+<div class="dd" *ngIf="pressed">
+    <p>Choose..</p>
+    <p *ngFor="let item of items"
+    (click)="select(item)" id="{{item}}">{{item}}</p>
+</div>

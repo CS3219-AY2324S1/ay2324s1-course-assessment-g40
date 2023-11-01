@@ -18,12 +18,16 @@ module.exports = mongoose => {
           required: true
         },
         questionCategory: {
-          type: String,
+          type: Array,
           required: true
         },
         questionComplexity: {
           type: String,
           required: true
+        },
+        questionTags: {
+          type: Array,
+          required: false
         }
       },
       { timestamps: true }

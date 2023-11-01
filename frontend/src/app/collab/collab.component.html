@@ -1,35 +1,50 @@
-<div class="flex-container">
-  <mat-card class="question-column">
-    <mat-card-header class="question-title">
-      <mat-card-title>
-        {{ question.questionTitle }}
-      </mat-card-title>
-      <mat-card-subtitle>
-        {{ question.complexity }}<br>
-        {{ question.questionCategory }}
-      </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content class="question-description">
-      {{ question.questionDescription }}
-    </mat-card-content>
-    <mat-card-actions class="collab-actions">
-      <a mat-icon-button (click)="getQuestion()">
-        <mat-icon>refresh</mat-icon>
-      </a>
-      <a
-        class="leave-room"
-        mat-icon-button (click)="leaveRoom()">
-        <mat-icon>exit_to_app</mat-icon>
-      </a>  
-    </mat-card-actions>
-  </mat-card>
-  <div class="editor-column">
-    <div class="editor-container">
-      <ngx-monaco-editor class ="monaco-editor"
-        [options]="editorOptions"
-        (onInit)="onInit($event)">
-      </ngx-monaco-editor>
+<div class="container d-block z-0">
+  <h1 class="mt-2">Collaboration Space</h1>
+  <div class="flex-container mt-3 p-2 overflow-x-scroll" style="height: 100vh;">
+    <div *ngIf="questionView" class="h-100">
+    <mat-card class="col h-100">
+        <mat-card-title class="m-3">{{question.questionTitle}}</mat-card-title>
+        <mat-card-content class="h-75">
+          <p style="color: gray">Complexity: {{question.questionComplexity}}</p>
+          <p style="color: gray">Category: {{question.questionCategory}}</p>
+          <div class="overflow-scroll p-1 h-75">
+            {{question.questionDescription}}
+          </div>
+        </mat-card-content>
+        <mat-card-footer>
+          <mat-card-actions class="justify-content-center mb-auto">
+            <a mat-icon-button (click)="getQuestion()">
+              <mat-icon>refresh</mat-icon>
+            </a>
+            <a
+              class="leave-room"
+              mat-icon-button (click)="leaveRoom()">
+              <mat-icon>exit_to_app</mat-icon>
+            </a>
+            <a mat-icon-button (click)="toggleQuestionView()">
+              <mat-icon>find_in_page</mat-icon>
+            </a>
+          </mat-card-actions>
+        </mat-card-footer>
+      </mat-card>
+      </div>
+      <div *ngIf="!questionView">
+        <mat-card class="col h-100">
+          <mat-card-title class="p-3"><mark (click)="toggleQuestionView()" style="background: none;">&crarr;</mark> Question</mat-card-title>
+          <mat-card-content>
+            <input type="text" #search class="form-control mt-2" placeholder="Search by index or title..." (keyup)="updateSearchResults(search.value)">
+            <button (click)="pullUpQuestion(res)" class="btn btn-outline-secondary m-1" *ngFor="let res of searchResults">{{res.questionTitle}}</button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    <div class="col-9">
+      <div class="h-100">
+        <ngx-monaco-editor class="h-100"
+          [options]="editorOptions"
+          (onInit)="onInit($event)">
+        </ngx-monaco-editor>
+      </div>
     </div>
-    <app-chat></app-chat>
   </div>
+  <app-chat class="d-block position-fixed z-3" style="right: 0; bottom: 0"></app-chat>
 </div>

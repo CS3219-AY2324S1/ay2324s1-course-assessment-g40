@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CollabService } from '../_services/collab.service';
+import { QuestionService } from '../_services/question.service';
 
 @Component({
   selector: 'app-collab',
@@ -18,10 +19,14 @@ export class CollabComponent implements OnInit {
   private editor: any;
   public editorOptions = { theme: 'vs-dark', language: '' };
 
+  searchResults: any;
+  questionView: boolean = true;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private collabService: CollabService,
+    private questionService: QuestionService
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +44,13 @@ export class CollabComponent implements OnInit {
       this.question = question;
     })
     this.getQuestion();
+    this.getQuestions();
+  }
+
+  getQuestions() {
+    this.questionService.getAllQuestions().subscribe((res) => {
+      this.searchResults = res;
+    })
   }
 
   // Expose editor interface
@@ -71,5 +83,22 @@ export class CollabComponent implements OnInit {
 
   public leaveRoom(): void {
     this.router.navigate(["/home"])
+  }
+
+  updateSearchResults(s: string) {
+    this.questionService.searchQuestions(s).subscribe(res => {
+      this.searchResults = res;
+    }, err => {
+      console.log(err);
+    })
+  }
+
+  toggleQuestionView() {
+    this.questionView = !this.questionView;
+  }
+
+  pullUpQuestion(q: Object) {
+    this.collabService.emitQuestion(q);
+    this.toggleQuestionView();
   }
 }

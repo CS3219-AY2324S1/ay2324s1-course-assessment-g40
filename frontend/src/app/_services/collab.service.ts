@@ -7,7 +7,7 @@ import { QuestionService } from "./question.service";
 
 export class CollabService implements OnInit, OnDestroy {
 
-  private socket = io('http://127.0.0.1:8080', {'forceNew': true});
+  private socket = io('http://127.0.0.1:8004', {'forceNew': true});
 
   public isLocalEvent$: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public change$: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -40,6 +40,10 @@ export class CollabService implements OnInit, OnDestroy {
       console.log(`Emitting random question:\n${res}`);
       this.socket.emit("question", res);
     })
+  }
+
+  public emitQuestion(question: Object) {
+    this.socket.emit("question", question);
   }
 
   public getQuestion = () => {

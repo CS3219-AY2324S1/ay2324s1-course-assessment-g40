@@ -1,10 +1,5 @@
 <div class="container">
     <h1 class="mt-3">Magic Question Machine</h1>
-    <!-- <div id="view">
-        <p>What question do you wish to view?</p>
-        <input type="number" name="qnstoview" id="qnstoview" [attr.max]="counter - 1" min="0" ngModel #selector>
-        <button class="btn btn-primary ms-2" type="submit" (click)="toggleView(selector.value)" [disabled]="!bottomView">Bring up the question!</button>
-    </div> -->
     <hr>
     <div class="top-view" *ngIf="!bottomView">
         <div class="question" *ngIf="currentIndex >= 0">
@@ -30,7 +25,11 @@
             <textarea type="text" name="questionDescription" id="description" class="form-control" ngModel required></textarea>
             <br>
             <label for="questionCategory" class="mb-3">Question Category :</label>
-            <input type="text" name="questionCategory" id="qcategory" class="form-control" ngModel required>
+            <div class="row p-3">
+                <mat-select name="questionCategory" multiple class="form-control" ngModel required>
+                  <mat-option *ngFor="let category of categoriesList" [value]="category">{{category}}</mat-option>
+                </mat-select>
+            </div>
             <br>
             <label for="questionComplexity" class="mb-3">Question Complexity :</label>
             <select name="questionComplexity" id="qcomplexity" class="form-select" ngModel required>
@@ -38,63 +37,88 @@
                 <option value="Medium">Medium</option>
                 <option value="Hard">Hard</option>
             </select>
+            <label for="questionTags" class="mt-3 mb-3">Tags :</label>
+            <div class="row p-3">
+                <mat-select name="questionTags" multiple class="form-control" ngModel>
+                  <mat-option *ngFor="let tag of tagsList" [value]="tag">{{tag}}</mat-option>
+                </mat-select>
+            </div>
             <br>
+            <!-- <div class="alert alert-danger" *ngIf="questionForm.touched && questionForm.invalid">Please fill in the fields in red.</div> -->
             <button type="button" (click)="addItem(questionForm)" class="btn btn-primary" [disabled]="!questionForm.valid">Save Question</button>
+            <!-- <button type="button" class="btn btn-secondary">Add Category</button>
+            <button type="button" class="btn btn-secondary">Add Tag</button> -->
         </form>
         <hr>
-        <table class="table">
-          <tr>
-              <th>Question ID</th>
-              <th>Question Title</th>
-              <th>Question Description</th>
-              <th>Question Category</th>
-              <th>Question Complexity</th>
-              <th>Actions</th>
-          </tr>
-          <tr *ngFor="let question of questions; index as index">
-                  <td (click)="toggleView(index)">{{question.questionId}}</td>
-                  <td>{{question.questionTitle}}</td>
-                  <td>{{question.questionDescription}}</td>
-                  <td>{{question.questionCategory}}</td>
-                  <td>{{question.questionComplexity}}</td>
-                  <td>
-                      <button class="btn btn-primary m-2" data-bs-toggle="modal" [attr.data-bs-target]="'#exampleModal' + question.questionId">Edit</button>
-                      <button class="btn btn-danger" (click)="deleteItem(index, question.questionId)">Delete</button>
-                  </td>
-                  <div class="modal fade" [id]="'exampleModal' + question.questionId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Edit Question</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form id="questionEditForm" #questionEditForm="ngForm">
-                        <div class="modal-body">
-                                <label for="questionTitle" class="mb-3">Question Title :</label>
-                                <input type="text" name="questionTitle" id="qtitle" [ngModel]="question.questionTitle" class="form-control">
-                                <br>
-                                <label for="questionDescription" class="mb-3">Question Description :</label>
-                                <textarea type="text" name="questionDescription" id="description" class="form-control" [ngModel]="question.questionDescription"></textarea>
-                                <br>
-                                <label for="questionCategory" class="mb-3">Question Category :</label>
-                                <input type="text" name="questionCategory" id="qcategory" class="form-control" [ngModel]="question.questionCategory">
-                                <br>
-                                <label for="questionComplexity" class="mb-3">Question Complexity :</label>
-                                <select name="questionComplexity" id="qcomplexity" class="form-select" [ngModel]="question.questionComplexity">
-                                    <option value="Easy" selected>Easy</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Hard">Hard</option>
-                                </select>
-                                <br>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary" (click)="editItem(index, question.questionId, questionEditForm)" data-bs-dismiss="modal">Save Question</button>
-                        </div>
-                        </form>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th>Question ID</th>
+                <th>Question Title</th>
+                <th>Question Description</th>
+                <th>Question Category</th>
+                <th>Question Complexity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let question of questions; index as index">
+                <td (click)="toggleView(index)">{{question.questionId}}</td>
+                <td>{{question.questionTitle}}</td>
+                <td>{{question.questionDescription}}</td>
+                <td>{{question.questionCategory}}</td>
+                <td>{{question.questionComplexity}}</td>
+                <td>
+                    <button class="btn btn-primary m-2" data-bs-toggle="modal" [attr.data-bs-target]="'#exampleModal' + question.questionId">Edit</button>
+                    <button class="btn btn-danger" (click)="deleteItem(index, question.questionId)">Delete</button>
+                </td>
+                <div class="modal fade" [id]="'exampleModal' + question.questionId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Question</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
+                      <form id="questionEditForm" #questionEditForm="ngForm">
+                      <div class="modal-body">
+                              <label for="questionTitle" class="mb-3">Question Title :</label>
+                              <input type="text" name="questionTitle" id="qtitle" [ngModel]="question.questionTitle" class="form-control">
+                              <br>
+                              <label for="questionDescription" class="mb-3">Question Description :</label>
+                              <textarea type="text" name="questionDescription" id="description" class="form-control" [ngModel]="question.questionDescription"></textarea>
+                              <br>
+                              <label for="questionCategory" class="mb-3">Question Category :</label>
+                              <div class="row p-3">
+                                  <mat-select name="questionCategory" multiple class="form-control" [ngModel]="question.questionCategory" required>
+                                    <mat-option *ngFor="let category of categoriesList" [value]="category">{{category}}</mat-option>
+                                  </mat-select>
+                              </div>
+                              <br>
+                              <label for="questionComplexity" class="mb-3">Question Complexity :</label>
+                              <select name="questionComplexity" id="qcomplexity" class="form-select" [ngModel]="question.questionComplexity">
+                                  <option value="Easy" selected>Easy</option>
+                                  <option value="Medium">Medium</option>
+                                  <option value="Hard">Hard</option>
+                              </select>
+                              <label for="questionTags" class="mt-3 mb-3">Tags :</label>
+                              <div class="row p-3">
+                                  <mat-select name="questionTags" multiple class="form-control" [ngModel]="question.questionTags">
+                                    <mat-option *ngFor="let tag of tagsList" [value]="tag" class="d-block z-3">{{tag}}</mat-option>
+                                  </mat-select>
+                              </div>
+                              <br>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" (click)="editItem(index, question.questionId, questionEditForm)" data-bs-dismiss="modal">Save Question</button>
+                      </div>
+                      </form>
                     </div>
                   </div>
-          </tr>
-        </table>
+                </div>
+        </tr>
+            </tbody>
+          </table>
+        </div>
     </div>

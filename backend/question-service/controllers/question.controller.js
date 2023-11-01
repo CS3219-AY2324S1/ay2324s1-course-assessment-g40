@@ -1,5 +1,6 @@
 const db = require('../models');
 const Question = db.questions;
+const Counter = db.counters;
 
 exports.create = (req, res) => {
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
@@ -7,25 +8,31 @@ exports.create = (req, res) => {
     return;
   }
 
-  const question = new Question({
-    questionId: req.body.questionId,
-    questionTitle: req.body.questionTitle,
-    questionDescription: req.body.questionDescription,
-    questionCategory: req.body.questionCategory,
-    questionComplexity: req.body.questionComplexity
-  });
-
-  question
-    .save(question)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: err.message || 'An error occured while creating the Question.'
-      })
+  Counter.findOneAndUpdate({ id: "questionId" }, { $inc: { seq: 1 } }, { upsert: true, new: true, setDefaultsOnInsert: true })
+  .then(count => {
+    const question = new Question({
+      questionId: count.seq,
+      questionTitle: req.body.questionTitle,
+      questionDescription: req.body.questionDescription,
+      questionCategory: req.body.questionCategory,
+      questionComplexity: req.body.questionComplexity,
+      questionTags: req.body.questionTags
     });
   
+    question
+      .save(question)
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: err.message || 'An error occured while creating the Question.'
+        })
+      });
+  }).catch(err => {
+    console.log(err);
+  })
+
   return;
 };
 
@@ -38,6 +45,20 @@ exports.findAll = (req, res) => {
   .catch(err => {
     res.status(500).send({
       message: err.message || "An error occurred while retrieving all questions"
+    })
+    return;
+  })
+}
+
+exports.findAllByCondition = (req, res) => {
+  Question.find({$text: {"$search": req.params.questionTitle}})
+  .then(data => {
+    res.send(data);
+    return;
+  })
+  .catch(err => {
+    res.status(500).send({
+      message: err.message || "an error occurred while searching"
     })
     return;
   })

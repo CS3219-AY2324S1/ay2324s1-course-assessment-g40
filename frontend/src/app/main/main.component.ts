@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { QuestionService } from '../_services/question.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-main',
@@ -13,7 +14,11 @@ export class MainComponent {
   currentQuestion: any = null;
   counter!: number;
   bottomView = true;
-selector: any;
+  selector: any;
+  tags = new FormControl('')
+  categories = new FormControl('')
+  categoriesList: string[] = ["Algorithms", "Brain Teasers", "Hashing", "Dynamic Programming"]
+  tagsList: string[] = ['Popular', 'NeetCode 150', 'Top 50', 'Top 10']
 
   constructor(private questionService: QuestionService) {}
   
@@ -55,7 +60,6 @@ selector: any;
 
   addItem(formData: any) {
       let obj = Object.assign({}, formData.value);
-      obj["questionId"] = this.counter;
       let dup = false
       // this is not right below
       this.questions.forEach((q) => {
@@ -67,13 +71,13 @@ selector: any;
       })
       if (!dup) {
         this.questionService.saveQuestion(obj).subscribe((res) => {
-          // log error
+          obj["questionId"] = res.questionId;
         })
         this.counter++;
         this.questions?.push(obj)
         this.saveQuestions();
+        formData.reset()
       }
-      
   }
 
   editItem(index: number, qid: number, formData: any) {
@@ -86,11 +90,15 @@ selector: any;
     })
   }
 
-  deleteItem(index:number, i: number) {
+  deleteItem(index: number, i: number) {
     this.questions.splice(index, 1);
     this.questionService.deleteQuestion(i).subscribe((res) => {
       // log error
     })
+  }
+
+  addTag(s: string) {
+    this.tagsList.push(s);
   }
   
 }

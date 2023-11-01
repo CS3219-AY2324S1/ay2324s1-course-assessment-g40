@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from './shared/material.module';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +24,7 @@ import { AuthGuard } from './_guards/auth.guard';
 import { RoleGuard } from './_guards/role.guard';
 import { CollabComponent } from './collab/collab.component';
 import { ChatComponent } from './collab/chat/chat.component';
+import { MultiSelectComponent } from './main/multi-select/multi-select.component';
 import { HistoryComponent } from './history/history.component';
 
 @NgModule({
@@ -38,7 +42,8 @@ import { HistoryComponent } from './history/history.component';
     ChatComponent,
     HistoryComponent
     ChangePasswordComponent,
-    DeleteAccountComponent
+    DeleteAccountComponent,
+    MultiSelectComponent
   ],
   imports: [
     BrowserModule,
@@ -46,6 +51,10 @@ import { HistoryComponent } from './history/history.component';
     FormsModule,
     HttpClientModule,
     MaterialModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
     MonacoEditorModule.forRoot()
   ],
   providers: [httpInterceptorProviders, AuthGuard, RoleGuard],

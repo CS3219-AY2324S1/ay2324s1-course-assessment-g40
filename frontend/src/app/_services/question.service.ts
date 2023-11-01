@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const API_URL = "http://127.0.0.1:8080/question/"
+const API_URL = "http://127.0.0.1:8002/question/"
 const AUTH_API_URL = "http://127.0.0.1:8080/question/auth/"
 
 const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' })};
@@ -31,7 +31,7 @@ export class QuestionService {
   saveQuestion(question: any): Observable<any> {
     let newobj = Object.assign({}, question);
     return this.http.post(
-        AUTH_API_URL,
+        API_URL,
         newobj,
         httpOptions
     )
@@ -40,7 +40,7 @@ export class QuestionService {
   editQuestion(question: any): Observable<any> {
     let newobj = Object.assign({}, question);
     return this.http.put(
-        AUTH_API_URL + newobj.questionId.toString(),
+        API_URL + newobj.questionId.toString(),
         newobj,
         httpOptions
     )
@@ -48,8 +48,15 @@ export class QuestionService {
 
   deleteQuestion(id: number): Observable<any> {
     return this.http.delete(
-        AUTH_API_URL + id.toString(),
+        API_URL + id.toString(),
         httpOptions
+    )
+  }
+
+  searchQuestions(s: string): Observable<any> {
+    return this.http.get(
+      API_URL + "search/" + s,
+      httpOptions
     )
   }
 

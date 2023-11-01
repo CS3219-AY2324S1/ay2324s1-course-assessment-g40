@@ -1,13 +1,50 @@
 <div class="container">
-    <header class="jumbotron">
-      <p>{{ content }}</p>
-    </header>
-    <div class="row">
-      <div class="col-5 bg-light">
-        Currently there are {{"..."}} questions!
-      </div>
-      <div class="col-5 bg-light">
-        More Stats...
-      </div>
+    <h1 class="mt-3">Questions</h1>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>Question ID</th>
+            <th>Question Title</th>
+            <th>Question Description</th>
+            <th>Question Category</th>
+            <th>Question Complexity</th>
+            <th>Tags</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let question of questions; index as index" [attr.data-bs-target]="'#exampleModal' + question.questionId" data-bs-toggle="modal">
+            <td (click)="toggleView(index)">{{question.questionId}}</td>
+            <td>{{question.questionTitle}}</td>
+            <td>{{question.questionDescription}}</td>
+            <td>{{question.questionCategory}}</td>
+            <td>{{question.questionComplexity}}</td>
+            <td>
+              <button class="btn btn-secondary m-2" *ngFor="let tag of question.questionTags">{{tag}}</button>
+            </td>
+            <div class="modal fade" [id]="'exampleModal' + question.questionId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">View Question</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                          <h2>{{question.questionTitle}}</h2>
+                          <button class="btn btn-secondary m-1" *ngFor="let tag of question.questionTags">{{tag}}</button>
+                          <p>{{question.questionDescription}}</p>
+                          <p>Category: {{question.questionCategory}}</p>
+                          <p>Complexity: {{question.questionComplexity}}</p>
+                          <br>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+    </tr>
+        </tbody>
+      </table>
     </div>
 </div>

@@ -19,7 +19,8 @@ export class AuthGuard  implements CanActivate {
             return true
         }
         // Navigate to the login page with extras
-        this.router.navigate(['/login'])
+        var err = "Please login!"
+        this.router.navigate(['/login'], {queryParams: {err: "Please login!"}})
         return false
     }
 }

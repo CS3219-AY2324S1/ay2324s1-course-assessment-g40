@@ -15,10 +15,10 @@ import { PageNotFoundComponentComponent } from './shared/page-not-found-componen
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'user', component: UserComponent, canActivate: [AuthGuard]  },
+  { path: 'user', component: UserComponent, canActivate: [AuthGuard, RoleGuard]  },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard, RoleGuard] },
   { path: 'match', component: MatchingComponent, canActivate: [AuthGuard] },
   { path: 'collab/:roomId/:difficulty/:language', component: CollabComponent, canActivate: [AuthGuard] },
