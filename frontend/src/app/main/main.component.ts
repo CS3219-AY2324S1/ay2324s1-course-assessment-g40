@@ -84,7 +84,7 @@ export class MainComponent {
     console.log(obj)
     this.questionService.editQuestion(obj).subscribe((res) => {
       this.questions[index] = obj;
-      document.getElementById('close')?.click();
+      document.getElementById(`close${qid}`)?.click();
       alert("Edited question successfully.");
     }, (err) => {
       alert("Duplicate Question title! Please try again")
