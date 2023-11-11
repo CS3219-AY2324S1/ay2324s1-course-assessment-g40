@@ -90,7 +90,7 @@ selector: any;
     this.questionService.editQuestion(obj).subscribe((res) => {
       this.questions[index] = obj;
       alert("Edited question successfully.");
-      document.getElementById('close')?.click();
+      document.getElementById(`close${qid}`)?.click();
     }, (err) => {
       var errMessage = "An error occurred while editing question " + qid + "!"
       if (err.error) {
