@@ -73,12 +73,15 @@ selector: any;
         formData.reset()
       }, (err) => {
         var errMessage = "An error occurred while adding your question!"
+        if (!err.error.message) {
+          alert(errMessage);
+          return
+        }
         if (err.error) {
           if (err.error.message.includes("duplicate key error")) {
-            errMessage = errMessage + " Error: " + err.error.message
+            alert(errMessage + " Error: " + err.error.message);
           }
         }
-        alert(errMessage);
       })
     }
   }
@@ -88,15 +91,25 @@ selector: any;
     obj["questionId"] = qid;
     console.log(obj)
     this.questionService.editQuestion(obj).subscribe((res) => {
+      if (res.status == 403) {
+        alert("You are not authorized to edit a question!")
+        document.getElementById(`close${qid}`)?.click();
+        return
+      }
       this.questions[index] = obj;
       alert("Edited question successfully.");
       document.getElementById(`close${qid}`)?.click();
     }, (err) => {
       var errMessage = "An error occurred while editing question " + qid + "!"
+      if (!err.error.message) {
+        alert(errMessage);
+        return
+      }
       if (err.error) {
         if (err.error.message.includes("duplicate key error")) {
           errMessage = errMessage + " Error: " + "You inputted a duplicate question title"
         }
+        errMessage = errMessage + " Error: " + err.error.message
       }
       alert(errMessage);
     })
@@ -106,7 +119,11 @@ selector: any;
     this.questionService.deleteQuestion(i).subscribe((res) => {
       this.questions.splice(index, 1);
     }, (err) => {
-      alert(err);
+      var errMessage = "An error occurred while deleting question!"
+      if (!err.error.message) {
+        alert(errMessage);
+        return
+      }
     })
   }
   
