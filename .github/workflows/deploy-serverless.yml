@@ -34,19 +34,10 @@ jobs:
     - uses: google-github-actions/setup-gcloud@1bee7de035d65ec5da40a31f8589e240eba8fde5
       with:
         project_id: ${{ secrets.GKE_PROJECT }}
-
-    - name: Grant Cloud Functions Permissions
-      run: |
-        gcloud projects add-iam-policy-binding $PROJECT_ID \
-          --member="allUsers" \
-          --role="roles/editor" \
-          --condition="None"
     
     - name: Deploy a Cloud Function
       id: deploy-function
-      uses: google-github-actions/deploy-cloud-functions@v1
-      with:
-        name: fetchQuestions
-        runtime: nodejs18
-        project_id: ${{ secrets.GKE_PROJECT }}
-        region: asia-southeast1
+      uses: "google-github-actions/deploy-cloud-functions@v0"
+        with:
+          name: fetchQuestions
+          runtime: nodejs18
