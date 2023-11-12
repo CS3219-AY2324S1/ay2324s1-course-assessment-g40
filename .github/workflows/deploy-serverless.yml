@@ -35,7 +35,7 @@ jobs:
       with:
         project_id: ${{ secrets.GKE_PROJECT }}
 
-    - name: Deploy a Cloud Function
+    - name: Deploy Serverless Function
       id: deploy-function
       uses: "google-github-actions/deploy-cloud-functions@v0"
       with:

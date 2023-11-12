@@ -1,7 +1,7 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
-const db = require('../backend/question-service/models');
-const CONNECTION_STRING = require('../backend/question-service/config/db.config');
+const db = require('./backend/question-service/models');
+const CONNECTION_STRING = require('./backend/question-service/config/db.config');
 
 // Connect to questions database
 mongoose.connect(CONNECTION_STRING, {
