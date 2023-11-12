@@ -36,7 +36,7 @@ jobs:
       run: |
         gcloud projects add-iam-policy-binding ${{ secrets.GKE_PROJECT }} \
           --member=serviceAccount:${{ secrets.GKE_SA_KEY }} \
-          --role=roles/cloudfunctions.functions.sourceCodeSet
+          --role=cloudfunctions.functions.sourceCodeSet
     
     - name: Deploy a Cloud Function
       id: deploy-function
