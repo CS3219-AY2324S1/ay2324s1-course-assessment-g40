@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    name: deploy
+    name: Deploy Serverless
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -34,3 +34,4 @@ jobs:
         name: fetchQuestions
         runtime: nodejs18
         project_id: ${{ secrets.GKE_PROJECT }}
+        region: asia-southeast1
