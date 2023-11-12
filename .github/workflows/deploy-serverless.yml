@@ -34,9 +34,9 @@ jobs:
 
     - name: Grant Cloud Functions Permissions
       run: |
-        gcloud projects add-iam-policy-binding ${{ secrets.GKE_PROJECT }} \
-          --member=serviceAccount:${{ secrets.GKE_SA_KEY }} \
-          --role=roles/cloudfunctions.admin
+        gcloud projects add-iam-policy-binding $GKE_PROJECT \
+          --member="allUsers" \
+          --role="roles/cloudfunctions.admin"
     
     - name: Deploy a Cloud Function
       id: deploy-function
