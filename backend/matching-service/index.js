@@ -5,7 +5,7 @@ const cookieSession = require("cookie-session");
 const app = express();
 
 var corsOptions = {
-  origin: 'http://127.0.0.1:8000',
+  origin: true,
   methods: 'PUT, PATCH, POST, DELETE',
   allowedHeaders: 'Origin, Authorization, Content-Type, Accept, Cookie',
   credentials: true,

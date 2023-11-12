@@ -2,8 +2,9 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { StorageService } from "./storage.service";
+import { environment } from '../../environments/environment';
 
-const api = "http://127.0.0.1:8080/history"
+const api = environment.BACKEND_API + "history/"
 
 const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
@@ -17,7 +18,7 @@ export class HistoryService {
   readHistory(history: any): Observable<any> {
     let newobj = Object.assign({}, history);
     return this.http.get(
-        api + "/attempt/" + newobj.questionId + "/" + newobj.userId,
+        api + "attempt/" + newobj.questionId + "/" + newobj.userId,
         httpOptions
     );
   }
@@ -25,7 +26,7 @@ export class HistoryService {
   readAllHistory(): Observable<any> {
     var user = this.storageService.getUser().username;
     return this.http.get(
-      api + "/user/" + user,
+      api + "user/" + user,
       httpOptions
     )
   }
@@ -33,7 +34,7 @@ export class HistoryService {
   saveHistory(history: any): Observable<any> {
     let newobj = Object.assign({}, history);
     return this.http.post(
-        api + "/" + newobj.questionId + "/" + newobj.userId,
+        api + newobj.questionId + "/" + newobj.userId,
         newobj,
         httpOptions
     )
@@ -42,7 +43,7 @@ export class HistoryService {
   editHistory(history: any): Observable<any> {
     let newobj = Object.assign({}, history);
     return this.http.put(
-        api + "/" + newobj.questionId.toString() + "/" + newobj.userId.toString(),
+        api + newobj.questionId.toString() + "/" + newobj.userId.toString(),
         newobj,
         httpOptions
     )
@@ -50,7 +51,7 @@ export class HistoryService {
 
   deleteHistory(id: number): Observable<any> {
     return this.http.delete(
-        api + "/" + id.toString(),
+        api + id.toString(),
         httpOptions
     )
   }

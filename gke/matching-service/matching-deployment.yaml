@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-service
+  labels:
+    app: matching-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matching-service
+  template:
+    metadata:
+      labels:
+        app: matching-service
+    spec:
+      containers:
+        - name: matching-service
+          image: asia-southeast1-docker.pkg.dev/crucial-mender-402111/peerprep/matching:latest
+          ports:
+            - name: match-service
+              containerPort: 8003
+      restartPolicy: Always

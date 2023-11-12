@@ -5,7 +5,7 @@ const cookieSession = require("cookie-session");
 const app = express();
 
 var corsOptions = {
-  origin: 'http://127.0.0.1:8000',
+  origin: true,
   methods: 'PUT, PATCH, POST, DELETE',
   allowedHeaders: 'Origin, Authorization, Content-Type, Accept, Cookie',
   credentials: true,
@@ -26,10 +26,10 @@ app.use(cookieSession({
 const PORT = 8002;
 
 const db = require("./models");
-const dbConfig = require("./config/db.config.js");
+const dbConfig = require('./config/db.config');
 
 db.mongoose
-  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+  .connect(dbConfig.CONNECTION_STRING, {
     useNewUrlParser:true,
     useUnifiedTopology:true
   }).then(() => {

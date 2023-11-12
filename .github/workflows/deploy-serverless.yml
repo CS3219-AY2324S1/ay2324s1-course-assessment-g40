@@ -1,0 +1,30 @@
+name: Deploy Function
+
+on:
+  push:
+    branches:
+      - assignment6
+      - master
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - name: Deploy a Cloud Function
+      id: deploy-function
+      uses: google-github-actions/deploy-cloud-functions@v0.1.0
+      with:
+        name: fetchQuestions
+        runtime: nodejs18
+        project: ${{ secrets.GKE_PROJECT }}
+        credentials_json: ${{ secrets.GKE_SA_KEY }}

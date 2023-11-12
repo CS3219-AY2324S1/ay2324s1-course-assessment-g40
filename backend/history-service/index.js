@@ -7,7 +7,7 @@ const db = require('./models');
 const dbConfig = require('./config/db.config.js');
 
 var corsOptions = {
-  origin: 'http://127.0.0.1:8000',
+  origin: true,
   methods: 'PUT, PATCH, POST, DELETE',
   allowedHeaders: 'Origin, Authorization, Content-Type, Accept, Cookie',
   credentials: true,
@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 db.mongoose.connection.on('error', console.error.bind(console, 'History database connection error:'));
 
 db.mongoose
-  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+  .connect(dbConfig.CONNECTION_STRING, {
     useNewUrlParser:true,
     useUnifiedTopology:true
   }).then(() => {

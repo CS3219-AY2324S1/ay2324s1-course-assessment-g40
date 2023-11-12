@@ -2,12 +2,13 @@ import { Injectable, OnInit, OnDestroy } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { io } from 'socket.io-client';
 import { QuestionService } from "./question.service";
+import { environment } from '../../environments/environment';
 
 @Injectable()
 
 export class CollabService implements OnInit, OnDestroy {
 
-  private socket = io('http://127.0.0.1:8080', {'forceNew': true});
+  private socket = io(environment.BACKEND_API, {'forceNew': true});
 
   public isLocalEvent$: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public change$: BehaviorSubject<any> = new BehaviorSubject(null);

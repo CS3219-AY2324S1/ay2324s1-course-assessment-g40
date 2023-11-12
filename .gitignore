@@ -7,6 +7,12 @@
 /bazel-out
 /frontend/dist
 
+# Environment files
+.env
+
+# Cloud secrets
+*-secret.*
+
 # Node
 node_modules
 npm-debug.log

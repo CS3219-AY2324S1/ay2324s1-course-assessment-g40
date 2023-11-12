@@ -24,6 +24,7 @@
     "@syncfusion/ej2-angular-richtexteditor": "^23.1.43",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.1",
+    "dotenv": "^16.3.1",
     "codemirror": "^5.65.15",
     "jquery": "^3.7.1",
     "monaco-editor": "^0.41.0",

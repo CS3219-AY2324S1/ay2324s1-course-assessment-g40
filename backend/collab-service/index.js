@@ -5,7 +5,7 @@ const { Server } = require('socket.io')
 const httpServer = createServer();
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://127.0.0.1:8000',
+    origin: true,
     methods: 'PUT, PATCH, POST, DELETE',
     allowedHeaders: 'Origin, Authorization, Content-Type, Accept',
     credentials: true,

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collab-service
+  labels:
+    app: collab-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: collab-service
+  template:
+    metadata:
+      labels:
+        app: collab-service
+    spec:
+      containers:
+        - name: collab-service
+          image: asia-southeast1-docker.pkg.dev/crucial-mender-402111/peerprep/collab:latest
+          ports:
+            - name: collab-service
+              containerPort: 8004
+      restartPolicy: Always
