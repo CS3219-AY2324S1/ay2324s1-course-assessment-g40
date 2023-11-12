@@ -6,6 +6,9 @@ on:
       - serverless
       - master
 
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+
 jobs:
   deploy:
     name: Deploy Serverless
@@ -34,7 +37,7 @@ jobs:
 
     - name: Grant Cloud Functions Permissions
       run: |
-        gcloud projects add-iam-policy-binding $GKE_PROJECT \
+        gcloud projects add-iam-policy-binding $PROJECT_ID \
           --member="allUsers" \
           --role="roles/cloudfunctions.admin"
     
