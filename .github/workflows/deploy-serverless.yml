@@ -39,7 +39,7 @@ jobs:
       run: |
         gcloud projects add-iam-policy-binding $PROJECT_ID \
           --member="allUsers" \
-          --role="roles/cloudfunctions.admin"
+          --role="roles/cloudfunctions.admin" \
           --condition="None"
     
     - name: Deploy a Cloud Function
