@@ -34,4 +34,3 @@ jobs:
         name: fetchQuestions
         runtime: nodejs18
         project_id: ${{ secrets.GKE_PROJECT }}
-        credentials: ${{ secrets.GKE_SA_KEY }}
