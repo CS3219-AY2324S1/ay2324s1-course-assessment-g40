@@ -34,10 +34,10 @@ jobs:
     - uses: google-github-actions/setup-gcloud@1bee7de035d65ec5da40a31f8589e240eba8fde5
       with:
         project_id: ${{ secrets.GKE_PROJECT }}
-    
+
     - name: Deploy a Cloud Function
       id: deploy-function
       uses: "google-github-actions/deploy-cloud-functions@v0"
-        with:
-          name: fetchQuestions
-          runtime: nodejs18
+      with:
+        name: fetchQuestions
+        runtime: nodejs18
