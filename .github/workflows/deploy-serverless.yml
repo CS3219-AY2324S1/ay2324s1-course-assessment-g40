@@ -27,6 +27,17 @@ jobs:
       with:
         credentials_json: ${{ secrets.GKE_SA_KEY }}
     
+     # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@1bee7de035d65ec5da40a31f8589e240eba8fde5
+      with:
+        project_id: ${{ secrets.GKE_PROJECT }}
+
+    - name: Grant Cloud Functions Permissions
+      run: |
+        gcloud projects add-iam-policy-binding ${{ secrets.GKE_PROJECT }} \
+          --member=serviceAccount:${{ secrets.GKE_SA_KEY }} \
+          --role=roles/cloudfunctions.functions.sourceCodeSet
+    
     - name: Deploy a Cloud Function
       id: deploy-function
       uses: google-github-actions/deploy-cloud-functions@v1
