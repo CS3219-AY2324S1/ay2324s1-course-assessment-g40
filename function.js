@@ -27,7 +27,7 @@ const HEADERS = {
 const endpoint = "https://leetcode.com/graphql";
 let finalData = {};
 
-exports.handler = async (event) => {
+exports.function = async (event) => {
     try {
         if (event.httpMethod === 'OPTIONS') {
             // Respond to preflight requests with a 200 OK status code
