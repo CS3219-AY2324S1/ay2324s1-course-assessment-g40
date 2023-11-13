@@ -51,7 +51,7 @@ exports.function = async () => {
         console.log("step 2");
         const stat_status_pairs = raw_data.stat_status_pairs;
         const question_title_slug = stat_status_pairs.filter(i => i.paid_only === false).map(i => i.stat.question__title_slug);
-        consolge.log(question_title_slug);
+        console.log(question_title_slug);
 
         var arr = [];
         while(arr.length < 5){
