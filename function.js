@@ -82,7 +82,6 @@ exports.function = async () => {
                     { query },
                     { headers: HEADERS }
                 );
-                console.log(response);
                 const data = response.data.data.question;
                 console.log(data);
                 if (data.topicTags.length > 0) {
@@ -98,7 +97,7 @@ exports.function = async () => {
  
                          // Save the updated document
                          await existingQuestion.save();
-                         console.log(`Updated question: "${question_title_slug[i]}"`);
+                         console.log(`Updated question: "${question_title_slug[arr[i]]}"`);
                      } else {
                          // Create a new Question document
                          const question = new db.questions({
@@ -110,14 +109,14 @@ exports.function = async () => {
                          });
  
                          // Save the question document to the MongoDB database
-                         console.log(`Added question: "${question_title_slug[i]}"`);
+                         console.log(`Added question: "${question_title_slug[arr[i]]}"`);
                          await question.save();
                      }
                 }
                 
                 finalData[data.questionId] = data;
             } catch (error) {
-                console.error(`Error fetching data for question "${question_title_slug[i]}":`, error);
+                console.error(`Error fetching data for question "${question_title_slug[arr[i]]}":`, error);
             }
         }
 
