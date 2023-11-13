@@ -1,6 +1,7 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
 const db = require('./backend/question-service/models');
+const functions = require('@google-cloud/functions-framework');
 
 // Connect to questions database
 mongoose.connect('mongodb+srv://yuanzhengtantyz:6fMDxgylAJlq5Ygr@peerprep.rrvvdr1.mongodb.net/?retryWrites=true&w=majority', {
@@ -26,23 +27,14 @@ const HEADERS = {
 const endpoint = "https://leetcode.com/graphql";
 let finalData = {};
 
-exports.function = async () => {
+functions.http('function', (req, res) => {
     try {
-        // if (event.httpMethod === 'OPTIONS') {
-        //     // Respond to preflight requests with a 200 OK status code
-        //     return {
-        //       statusCode: 200,
-        //       headers: {
-        //         'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        //         'Access-Control-Allow-Headers': 'Content-Type',
-        //         'Access-Control-Allow-Credentials': 'true',
-        //       },
-        //       body: '',
-        //     };
-        // }
-        
-        // const requestData = JSON.parse(event.body);
-        // const counter = requestData.counter;
+        if (req.method === 'OPTIONS') {
+            res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+            res.set('Access-Control-Allow-Headers', 'Content-Type');
+            res.set('Access-Control-Allow-Credentials', 'true');
+            res.status(200).send('');
+        }
 
         const response = await axios.get("https://leetcode.com/api/problems/all");
         const raw_data = response.data;
@@ -117,18 +109,10 @@ exports.function = async () => {
         }
 
         // Create a response object
-        // const responseObj = {
-        //     statusCode: 200,
-        //     body: JSON.stringify({ finalData }),
-        //     headers: HEADERS,
-        // };
-
-        // return responseObj;
+        res.set('headers', HEADERS);
+        res.status(200).send(JSON.stringify({ finalData }));
     } catch (error) {
         console.error('Error fetching question list:', error);
-        // return {
-        //     statusCode: 500,
-        //     body: 'Failed to fetch questions',
-        // };
+        res.status(500).send('Failed to fetch questions');
     }
-};
+});
