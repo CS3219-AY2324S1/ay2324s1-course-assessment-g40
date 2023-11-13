@@ -41,4 +41,4 @@ jobs:
       with:
         name: function
         runtime: nodejs18
-        timeout: 300
+        timeout: 540
