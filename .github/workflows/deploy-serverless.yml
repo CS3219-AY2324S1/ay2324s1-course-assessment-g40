@@ -41,4 +41,3 @@ jobs:
       with:
         name: function
         runtime: nodejs18
-        source: ./backend/functions/
