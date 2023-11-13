@@ -27,7 +27,7 @@ const HEADERS = {
 const endpoint = "https://leetcode.com/graphql";
 let finalData = {};
 
-functions.http('function', (req, res) => {
+functions.http('function', async (req, res) => {
     try {
         if (req.method === 'OPTIONS') {
             res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
