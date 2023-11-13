@@ -51,6 +51,7 @@ exports.function = async () => {
         console.log("step 2");
         const stat_status_pairs = raw_data.stat_status_pairs;
         const question_title_slug = stat_status_pairs.filter(i => i.paid_only === false).map(i => i.stat.question__title_slug);
+        consolge.log(question_title_slug);
 
         var arr = [];
         while(arr.length < 5){
@@ -58,11 +59,12 @@ exports.function = async () => {
             if(arr.indexOf(r) === -1) arr.push(r);
         }
         console.log("step 3");
+        consolge.log(arr);
         for (let i = 0; i < arr.length; i++) {
             try {
                 const query = `
                     query questionData {
-                        question(titleSlug: "${question_title_slug[i]}") {
+                        question(titleSlug: "${question_title_slug[arr[i]]}") {
                             questionId
                             title
                             titleSlug
@@ -80,9 +82,9 @@ exports.function = async () => {
                     { query },
                     { headers: HEADERS }
                 );
-        
+                console.log(response);
                 const data = response.data.data.question;
-
+                console.log(data);
                 if (data.topicTags.length > 0) {
                      // Check if a document with the same titleSlug exists in the database
                      const existingQuestion = await db.questions.findOne({ questionId: data.titleSlug });
