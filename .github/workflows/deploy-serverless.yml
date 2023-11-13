@@ -8,16 +8,6 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  - name: DB_USERNAME	
-    valueFrom:	
-      secretKeyRef:	
-        name: db-admin	
-        key: db-username	
-  - name: DB_PASSWORD	
-    valueFrom:	
-      secretKeyRef:	
-        name: db-admin	
-        key: db-password
 
 jobs:
   deploy:
