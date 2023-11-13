@@ -1,7 +1,6 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
 const db = require('./backend/question-service/models');
-const CONNECTION_STRING = require('./backend/question-service/config/db.config');
 
 // Connect to questions database
 mongoose.connect('mongodb+srv://yuanzhengtantyz:6fMDxgylAJlq5Ygr@peerprep.rrvvdr1.mongodb.net/?retryWrites=true&w=majority', {
@@ -118,18 +117,18 @@ exports.function = async () => {
         }
 
         // Create a response object
-        const responseObj = {
-            statusCode: 200,
-            body: JSON.stringify({ finalData }),
-            headers: HEADERS,
-        };
+        // const responseObj = {
+        //     statusCode: 200,
+        //     body: JSON.stringify({ finalData }),
+        //     headers: HEADERS,
+        // };
 
-        return responseObj;
+        // return responseObj;
     } catch (error) {
         console.error('Error fetching question list:', error);
-        return {
-            statusCode: 500,
-            body: 'Failed to fetch questions',
-        };
+        // return {
+        //     statusCode: 500,
+        //     body: 'Failed to fetch questions',
+        // };
     }
 };
