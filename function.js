@@ -45,9 +45,10 @@ exports.function = async (event) => {
         const requestData = JSON.parse(event.body);
         const counter = requestData.counter;
 
+        console.log("step 1");
         const response = await axios.get("https://leetcode.com/api/problems/all");
         const raw_data = response.data;
-
+        console.log("step 2");
         const stat_status_pairs = raw_data.stat_status_pairs;
         const question_title_slug = stat_status_pairs.filter(i => i.paid_only === false).map(i => i.stat.question__title_slug);
 
@@ -56,7 +57,7 @@ exports.function = async (event) => {
             var r = Math.floor(Math.random() * question_title_slug.length) + 1;
             if(arr.indexOf(r) === -1) arr.push(r);
         }
-
+        console.log("step 3");
         for (let i = 0; i < arr.length; i++) {
             try {
                 const query = `
@@ -118,6 +119,7 @@ exports.function = async (event) => {
             }
         }
 
+        console.log("step 4");
         // Create a response object
         const responseObj = {
             statusCode: 200,
