@@ -59,7 +59,7 @@ exports.function = async () => {
             if(arr.indexOf(r) === -1) arr.push(r);
         }
         console.log("step 3");
-        consolge.log(arr);
+        console.log(arr);
         for (let i = 0; i < arr.length; i++) {
             try {
                 const query = `
