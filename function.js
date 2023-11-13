@@ -4,10 +4,10 @@ const db = require('./backend/question-service/models');
 const CONNECTION_STRING = require('./backend/question-service/config/db.config');
 
 // Connect to questions database
-mongoose.connect('mongodb+srv://yuanzhengtantyz:AqhYoCF1Cy6x7e6f@peerprep.rrvvdr1.mongodb.net/?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://yuanzhengtantyz:6fMDxgylAJlq5Ygr@peerprep.rrvvdr1.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser:true,
     useUnifiedTopology:true
-}).then(() => {
+  }).then(() => {
     console.log('Connected to the database.');
 }).catch(err => {
     console.log('Connection failed.', err);
