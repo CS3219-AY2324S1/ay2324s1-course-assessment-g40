@@ -53,7 +53,7 @@ exports.function = async () => {
         const question_title_slug = stat_status_pairs.filter(i => i.paid_only === false).map(i => i.stat.question__title_slug);
 
         var arr = [];
-        while(arr.length < 10){
+        while(arr.length < 5){
             var r = Math.floor(Math.random() * question_title_slug.length) + 1;
             if(arr.indexOf(r) === -1) arr.push(r);
         }
@@ -126,7 +126,7 @@ exports.function = async () => {
             body: JSON.stringify({ finalData }),
             headers: HEADERS,
         };
-
+        console.log("step 5");
         return responseObj;
     } catch (error) {
         console.error('Error fetching question list:', error);
