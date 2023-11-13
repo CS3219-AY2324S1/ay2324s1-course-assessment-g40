@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@google-cloud/functions-framework": "^3.3.0",
     "axios": "^1.6.1",
     "dotenv": "^16.3.1",
     "mongoose": "^8.0.0"
