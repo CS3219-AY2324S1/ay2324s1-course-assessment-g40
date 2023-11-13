@@ -27,23 +27,23 @@ const HEADERS = {
 const endpoint = "https://leetcode.com/graphql";
 let finalData = {};
 
-exports.function = async (event) => {
+exports.function = async () => {
     try {
-        if (event.httpMethod === 'OPTIONS') {
-            // Respond to preflight requests with a 200 OK status code
-            return {
-              statusCode: 200,
-              headers: {
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Allow-Credentials': 'true',
-              },
-              body: '',
-            };
-        }
+        // if (event.httpMethod === 'OPTIONS') {
+        //     // Respond to preflight requests with a 200 OK status code
+        //     return {
+        //       statusCode: 200,
+        //       headers: {
+        //         'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        //         'Access-Control-Allow-Headers': 'Content-Type',
+        //         'Access-Control-Allow-Credentials': 'true',
+        //       },
+        //       body: '',
+        //     };
+        // }
         
-        const requestData = JSON.parse(event.body);
-        const counter = requestData.counter;
+        // const requestData = JSON.parse(event.body);
+        // const counter = requestData.counter;
 
         console.log("step 1");
         const response = await axios.get("https://leetcode.com/api/problems/all");
@@ -62,7 +62,7 @@ exports.function = async (event) => {
             try {
                 const query = `
                     query questionData {
-                        question(titleSlug: "${question_title_slug[counter + i]}") {
+                        question(titleSlug: "${question_title_slug[i]}") {
                             questionId
                             title
                             titleSlug
@@ -96,7 +96,7 @@ exports.function = async (event) => {
  
                          // Save the updated document
                          await existingQuestion.save();
-                         console.log(`Updated question: "${question_title_slug[counter + i]}"`);
+                         console.log(`Updated question: "${question_title_slug[i]}"`);
                      } else {
                          // Create a new Question document
                          const question = new db.questions({
@@ -108,14 +108,14 @@ exports.function = async (event) => {
                          });
  
                          // Save the question document to the MongoDB database
-                         console.log(`Added question: "${question_title_slug[counter + i]}"`);
+                         console.log(`Added question: "${question_title_slug[i]}"`);
                          await question.save();
                      }
                 }
                 
                 finalData[data.questionId] = data;
             } catch (error) {
-                console.error(`Error fetching data for question "${question_title_slug[counter + i]}":`, error);
+                console.error(`Error fetching data for question "${question_title_slug[i]}":`, error);
             }
         }
 
