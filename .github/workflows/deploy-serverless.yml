@@ -3,7 +3,7 @@ name: Deploy Function
 on:
   push:
     branches:
-      - serverless
+      - serverless2
       - master
 
 env:
@@ -39,6 +39,7 @@ jobs:
       id: deploy-function
       uses: "google-github-actions/deploy-cloud-functions@v0"
       with:
-        name: question-fetcher/function
+        name: function
         runtime: nodejs18
         timeout: 540
+        source: ./question-fetcher
