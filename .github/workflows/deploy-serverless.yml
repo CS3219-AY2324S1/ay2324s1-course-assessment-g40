@@ -3,7 +3,6 @@ name: Deploy Function
 on:
   push:
     branches:
-      - serverless2
       - master
 
 env:
