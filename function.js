@@ -1,4 +1,4 @@
-const db = require('../question-service/models/index');
+const db = require('./backend/question-service/models/index');
 const axios = require('axios');
 const mongoose = require('mongoose');
 const functions = require('@google-cloud/functions-framework');
