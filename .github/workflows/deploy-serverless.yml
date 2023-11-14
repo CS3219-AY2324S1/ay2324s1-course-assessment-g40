@@ -39,6 +39,6 @@ jobs:
       id: deploy-function
       uses: "google-github-actions/deploy-cloud-functions@v0"
       with:
-        name: question-fetcher/function
+        name: ./question-fetcher/function
         runtime: nodejs18
         timeout: 540
