@@ -76,55 +76,40 @@ functions.http('function', async (req, res) => {
                 const data = response.data.data.question;
 
                 if (data.topicTags.length > 0) {
-                    // // Check if a document with the same titleSlug exists in the database
-                    // const existingQuestion = await db.questions.findOne({ questionId: data.titleSlug });
+                    // // Check if a document with the same title exists in the database
+                    const existingQuestion = await db.questions.findOne({ questionTitle: data.title });
 
-                    // if (existingQuestion) {
-                    //     // Update the existing document with the new data
-                    //     existingQuestion.questionTitle = data.title;
-                    //     existingQuestion.questionDescription = data.content;
-                    //     existingQuestion.questionCategory = data.topicTags[0].name;
-                    //     existingQuestion.questionComplexity = data.difficulty;
+                    if (existingQuestion) {
+                        // Update the existing document with the new data
+                        existingQuestion.questionTitle = data.title;
+                        existingQuestion.questionDescription = data.content;
+                        existingQuestion.questionCategory = data.topicTags[0].name;
+                        existingQuestion.questionComplexity = data.difficulty;
 
-                    //     // Save the updated document
-                    //     await existingQuestion.save();
-                    //     console.log(`Updated question: "${question_title_slug[arr[i]]}"`);
-                    // } else {
-                    //     // Create a new Question document
-                    //     const question = new db.questions({
-                    //         questionId: data.titleSlug,
-                    //         questionTitle: data.title,
-                    //         questionDescription: data.content,
-                    //         questionCategory: data.topicTags[0].name,
-                    //         questionComplexity: data.difficulty,
-                    //     });
-
-                    //     // Save the question document to the MongoDB database
-                    //     console.log(`Added question: "${question_title_slug[arr[i]]}"`);
-                    //     await question.save();
-                    // }
-
-                    Counter.findOneAndUpdate({ id: "questionId" }, { $inc: { seq: 1 } }, { upsert: true, new: true, setDefaultsOnInsert: true })
-                        .then(count => {
-                            const question = new Question({
-                            questionId: count.seq,
-                            questionTitle: data.title,
-                            questionDescription: data.content,
-                            questionCategory: data.topicTags[0].name,
-                            questionComplexity: data.difficulty
-                        });
-                    
-                        question.save(question).then(data => {
-                            res.send(data);
+                        // Save the updated document
+                        await existingQuestion.save();
+                        console.log(`Updated question: "${data.title}"`);
+                    } else {
+                        // Update counter and add new question
+                        Counter.findOneAndUpdate({ id: "questionId" }, { $inc: { seq: 1 } }, { upsert: true, new: true, setDefaultsOnInsert: true })
+                            .then(count => {
+                                const question = new Question({
+                                questionId: count.seq,
+                                questionTitle: data.title,
+                                questionDescription: data.content,
+                                questionCategory: data.topicTags[0].name,
+                                questionComplexity: data.difficulty
+                            });
+                        
+                            question.save(question).then(data => {
+                                console.log(`Added question: "${data.title}"`);
+                            }).catch(err => {
+                                res.status(500).send({ message: err.message });
+                            });
+                        }).catch(err => {
+                            console.log(err);
                         })
-                        .catch(err => {
-                            res.status(500).send({
-                                message: err.message || 'An error occured while fetching questions.'
-                            })
-                        });
-                    }).catch(err => {
-                        console.log(err);
-                    })
+                    }
                 }
                 
                 finalData[data.questionId] = data;
