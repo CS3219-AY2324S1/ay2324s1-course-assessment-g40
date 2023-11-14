@@ -42,4 +42,4 @@ jobs:
         name: function
         runtime: nodejs18
         timeout: 540
-        source: ./question-fetcher
+        source_dir: ./question-fetcher
