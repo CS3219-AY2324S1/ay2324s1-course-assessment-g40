@@ -43,7 +43,7 @@ functions.http('function', async (req, res) => {
         const question_title_slug = stat_status_pairs.filter(i => i.paid_only === false).map(i => i.stat.question__title_slug);
 
         var arr = [];
-        while(arr.length < 20){
+        while(arr.length < 200){
             var r = Math.floor(Math.random() * question_title_slug.length) + 1;
             if(arr.indexOf(r) === -1) arr.push(r);
         }
