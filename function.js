@@ -89,6 +89,7 @@ functions.http('function', async (req, res) => {
                         // Save the updated document
                         await existingQuestion.save();
                         console.log('Updated question: ', data.title);
+                        finalData[existingQuestion.questionId] = existingQuestion;
                     } else {
                         // Update counter and add new question
                         Counter.findOneAndUpdate({ id: "questionId" }, { $inc: { seq: 1 } }, { upsert: true, new: true, setDefaultsOnInsert: true })
@@ -103,6 +104,7 @@ functions.http('function', async (req, res) => {
                         
                             question.save(question).then(e => {
                                 console.log('Added question: ', data.title);
+                                finalData[question.questionId] = question;
                             }).catch(err => {
                                 res.status(500).send({ message: err.message });
                             });
@@ -111,8 +113,6 @@ functions.http('function', async (req, res) => {
                         })
                     }
                 }
-                
-                finalData[data.questionId] = data;
             } catch (error) {
                 console.error(`Error fetching data for question "${question_title_slug[arr[i]]}":`, error);
                 res.status(500).send('');
