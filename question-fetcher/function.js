@@ -1,6 +1,6 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
-const db = require('../backend/question-service/models');
+const db = require('../backend/question-service/models/index.js');
 const functions = require('@google-cloud/functions-framework');
 
 // Connect to questions database
