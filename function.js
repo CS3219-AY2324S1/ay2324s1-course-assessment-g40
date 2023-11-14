@@ -10,11 +10,11 @@ mongoose.connect('mongodb+srv://yuanzhengtantyz:6fMDxgylAJlq5Ygr@peerprep.rrvvdr
   }).then(() => {
     console.log('Connected to the database.');
 }).catch(err => {
-    console.log('Connection failed.', err);
+    console.error('Connection failed.', err);
 });
 
 /*
-Serverless function that fetches questions from Leetcode (thirs party API)
+Serverless function that fetches questions from Leetcode (third party API)
 */
 
 // Useful constants
@@ -43,10 +43,13 @@ functions.http('function', async (req, res) => {
         const question_title_slug = stat_status_pairs.filter(i => i.paid_only === false).map(i => i.stat.question__title_slug);
 
         var arr = [];
-        while(arr.length < 200){
+        while(arr.length < 5){
             var r = Math.floor(Math.random() * question_title_slug.length) + 1;
             if(arr.indexOf(r) === -1) arr.push(r);
         }
+
+        const Counter = db.counters;
+        const Question = db.questions;
 
         for (let i = 0; i < arr.length; i++) {
             try {
@@ -73,38 +76,61 @@ functions.http('function', async (req, res) => {
                 const data = response.data.data.question;
 
                 if (data.topicTags.length > 0) {
-                     // Check if a document with the same titleSlug exists in the database
-                     const existingQuestion = await db.questions.findOne({ questionId: data.titleSlug });
+                    // // Check if a document with the same titleSlug exists in the database
+                    // const existingQuestion = await db.questions.findOne({ questionId: data.titleSlug });
 
-                     if (existingQuestion) {
-                         // Update the existing document with the new data
-                         existingQuestion.questionTitle = data.title;
-                         existingQuestion.questionDescription = data.content;
-                         existingQuestion.questionCategory = data.topicTags[0].name;
-                         existingQuestion.questionComplexity = data.difficulty;
- 
-                         // Save the updated document
-                         await existingQuestion.save();
-                         console.log(`Updated question: "${question_title_slug[arr[i]]}"`);
-                     } else {
-                         // Create a new Question document
-                         const question = new db.questions({
-                             questionId: data.titleSlug,
-                             questionTitle: data.title,
-                             questionDescription: data.content,
-                             questionCategory: data.topicTags[0].name,
-                             questionComplexity: data.difficulty,
-                         });
- 
-                         // Save the question document to the MongoDB database
-                         console.log(`Added question: "${question_title_slug[arr[i]]}"`);
-                         await question.save();
-                     }
+                    // if (existingQuestion) {
+                    //     // Update the existing document with the new data
+                    //     existingQuestion.questionTitle = data.title;
+                    //     existingQuestion.questionDescription = data.content;
+                    //     existingQuestion.questionCategory = data.topicTags[0].name;
+                    //     existingQuestion.questionComplexity = data.difficulty;
+
+                    //     // Save the updated document
+                    //     await existingQuestion.save();
+                    //     console.log(`Updated question: "${question_title_slug[arr[i]]}"`);
+                    // } else {
+                    //     // Create a new Question document
+                    //     const question = new db.questions({
+                    //         questionId: data.titleSlug,
+                    //         questionTitle: data.title,
+                    //         questionDescription: data.content,
+                    //         questionCategory: data.topicTags[0].name,
+                    //         questionComplexity: data.difficulty,
+                    //     });
+
+                    //     // Save the question document to the MongoDB database
+                    //     console.log(`Added question: "${question_title_slug[arr[i]]}"`);
+                    //     await question.save();
+                    // }
+
+                    Counter.findOneAndUpdate({ id: "questionId" }, { $inc: { seq: 1 } }, { upsert: true, new: true, setDefaultsOnInsert: true })
+                        .then(count => {
+                            const question = new Question({
+                            questionId: count.seq,
+                            questionTitle: data.title,
+                            questionDescription: data.content,
+                            questionCategory: data.topicTags[0].name,
+                            questionComplexity: data.difficulty
+                        });
+                    
+                        question.save(question).then(data => {
+                            res.send(data);
+                        })
+                        .catch(err => {
+                            res.status(500).send({
+                                message: err.message || 'An error occured while fetching questions.'
+                            })
+                        });
+                    }).catch(err => {
+                        console.log(err);
+                    })
                 }
                 
                 finalData[data.questionId] = data;
             } catch (error) {
                 console.error(`Error fetching data for question "${question_title_slug[arr[i]]}":`, error);
+                res.status(500).send('');
             }
         }
 
