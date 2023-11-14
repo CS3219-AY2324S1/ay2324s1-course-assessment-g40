@@ -42,4 +42,3 @@ jobs:
         name: function
         runtime: nodejs18
         timeout: 540
-        source_dir: ./backend/question-fetcher
