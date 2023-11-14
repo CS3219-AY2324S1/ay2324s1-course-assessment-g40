@@ -1,12 +1,6 @@
+const db = require('../question-service/models/index');
 const axios = require('axios');
 const mongoose = require('mongoose');
-try {
-    const db = require('../backend/question-service/models/index');
-    console.log('Import successful:', db);
-} catch (error) {
-    console.error('Error importing:', error);
-}
-  
 const functions = require('@google-cloud/functions-framework');
 
 // Connect to questions database
