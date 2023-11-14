@@ -88,7 +88,7 @@ functions.http('function', async (req, res) => {
 
                         // Save the updated document
                         await existingQuestion.save();
-                        console.log(`Updated question: "${data.title}"`);
+                        console.log('Updated question: ', data.title);
                     } else {
                         // Update counter and add new question
                         Counter.findOneAndUpdate({ id: "questionId" }, { $inc: { seq: 1 } }, { upsert: true, new: true, setDefaultsOnInsert: true })
@@ -101,8 +101,8 @@ functions.http('function', async (req, res) => {
                                 questionComplexity: data.difficulty
                             });
                         
-                            question.save(question).then(data => {
-                                console.log(`Added question: "${data.title}"`);
+                            question.save(question).then(e => {
+                                console.log('Added question: ', data.title);
                             }).catch(err => {
                                 res.status(500).send({ message: err.message });
                             });
