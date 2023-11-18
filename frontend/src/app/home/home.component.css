@@ -1,0 +1,43 @@
+table thead, table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+td::-webkit-scrollbar, th::-webkit-scrollbar, tbody::-webkit-scrollbar {
+  display: none;
+}
+
+td, th, tbody {
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
+button {
+  font-size: min(2vw, 16px);
+  padding: 5px;
+}
+
+.modal.show {
+  background-color: rgba(0,0,0,.0001) !important;
+  display: inline;
+}
+
+.scrollable-container{
+  white-space: pre-line !important;
+}
+
+div.container{
+  white-space: pre-line !important;
+}
+
+.modal-open {
+  padding-right: 0px;
+  margin-right: 0px
+}
+
+::ng-deep img {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  max-width: 500px !important;
+}

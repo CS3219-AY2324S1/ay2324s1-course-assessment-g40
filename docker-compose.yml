@@ -1,0 +1,118 @@
+version: "3"
+services:
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - 8000:80 # map nginx port 80 to port 8000 for frontend
+    networks:
+      - frontend
+    depends_on:
+      - user
+      - question
+
+  gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    networks:
+      - frontend
+      - backend
+
+  user:
+    build: ./backend/user-service
+    container_name: user-service
+    restart: unless-stopped
+    expose:
+      - "8001"
+    networks:
+      - backend
+    depends_on:
+      - user-db
+
+  question:
+    build: ./backend/question-service
+    container_name: question-service
+    restart: unless-stopped
+    expose:
+      - "8002"
+    networks:
+      - backend
+
+  matching:
+    build: ./backend/matching-service
+    container_name: matching-service
+    restart: unless-stopped
+    expose:
+      - "8003"
+    networks:
+      - backend
+    depends_on:
+      - question-db
+
+  collab:
+    build: ./backend/collab-service
+    container_name: collab-service
+    restart: unless-stopped
+    expose:
+      - "8004"
+    networks:
+      - backend
+
+  history:
+    build: ./backend/history-service
+    container_name: history-service
+    restart: unless-stopped
+    expose:
+      - "8005"
+    networks:
+      - backend
+
+  user-db:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    container_name: user-db
+    restart: unless-stopped
+    volumes:
+      - user-db-data:/data/db
+      - user-db-data:/data/configdb
+    expose:
+      - "27001"
+    networks:
+      - backend
+
+  question-db:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    container_name: question-db
+    restart: unless-stopped
+    volumes:
+      - question-db-data:/data/db
+      - question-db-data:/data/configdb
+    expose:
+      - "27001"
+    networks:
+      - backend
+
+  history-db:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    container_name: history-db
+    volumes:
+      - history-db-data:/data/db
+      - history-db-data:/data/configdb
+    expose:
+      - "27001"
+    networks:
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  user-db-data:
+  question-db-data:
+  history-db-data:

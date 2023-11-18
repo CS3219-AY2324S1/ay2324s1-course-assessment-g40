@@ -1,0 +1,44 @@
+name: Deploy Function
+
+on:
+  push:
+    branches:
+      - serverless
+      - master
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+
+jobs:
+  deploy:
+    name: Deploy Serverless
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+    - uses: 'actions/checkout@v4'
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: ${{ secrets.GKE_SA_KEY }}
+
+     # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@1bee7de035d65ec5da40a31f8589e240eba8fde5
+      with:
+        project_id: ${{ secrets.GKE_PROJECT }}
+
+    - name: Deploy Serverless Function
+      id: deploy-function
+      uses: "google-github-actions/deploy-cloud-functions@v0"
+      with:
+        name: function
+        runtime: nodejs18
+        timeout: 540

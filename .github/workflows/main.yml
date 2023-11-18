@@ -1,0 +1,63 @@
+name: PeerPrep CI
+
+on:
+  push:
+    branches: 
+      - "master"
+  pull_request:
+    branches:
+      - "master"
+
+jobs:
+
+  backend-test:
+    runs-on: ubuntu-latest
+    name: Backend Tests
+    steps:
+    - uses: actions/checkout@v3
+    - name: Question Service Test
+      working-directory: ./backend/question-service
+      run: |
+          npm install
+          npm install jasmine
+          npx jasmine --random=false ./spec/question.spec.js
+    - name: User Service Test
+      working-directory: ./backend/user-service
+      run: |
+          npm install
+          npm install jasmine
+          npx jasmine --random=false ./spec/user.spec.js
+          npx jasmine --random=false ./spec/auth.spec.js
+    - name: Matching Service Test
+      working-directory: ./backend/matching-service
+      run: |
+          npm install
+          npm install jasmine
+          npx jasmine --random=false ./spec/matching-queue.spec.js
+          npx jasmine --random=false ./spec/matching.spec.js
+    - name: History Service Test
+      working-directory: ./backend/history-service
+      run: |
+          npm install
+          npm install jasmine
+          npx jasmine --random=false ./spec/history.spec.js
+  build:
+    runs-on: ubuntu-latest
+    name: Build
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the service
+      run: docker-compose up -d
+
+  frontend-test:
+    runs-on: ubuntu-latest
+    name: Frontend Tests
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+    - name: Frontend
+      working-directory: ./frontend
+      run: |
+          npm install
+          npm install -g @angular/cli
+          xvfb-run -a ng test --watch=false --browsers=ChromeHeadless 

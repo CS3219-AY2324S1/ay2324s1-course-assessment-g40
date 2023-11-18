@@ -1,0 +1,30 @@
+input.ng-invalid.ng-touched {
+  border: red 1px solid;
+}
+
+.question-description-id{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width: 300px;
+}
+div{
+  white-space: pre-line;
+}
+.form-control {
+  white-space: pre-line;
+}
+
+mark {
+  background: none;
+}
+
+.modal.show {
+  background-color: rgba(0,0,0,.0001) !important;
+  display: inline;
+}
+
+.modal-open {
+  padding-right: 0px;
+  margin-right: 0px
+}

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: collab-service
+  annotations:
+    cloud.google.com/backend-config: '{"default": "collab-service-backendconfig"}'
+  labels:
+    app: collab-service
+spec:
+  selector:
+    app: collab-service
+  type: ClusterIP
+  ports:
+    - name: collab-service
+      protocol: TCP
+      port: 8004
+      targetPort: 8004

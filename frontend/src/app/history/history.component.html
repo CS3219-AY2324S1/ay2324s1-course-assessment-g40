@@ -1,0 +1,52 @@
+<div class="container">
+    <h1 class="mt-2">Attempt History</h1>
+    <div class="table-responsive mt-3">
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Question Title</th>
+                <th>Question Complexity</th>
+                <th>Question Category</th>
+                <th>Language</th>
+                <th>Partner</th>
+              </tr>
+            </thead>
+            <tbody style="display: block; max-height: 70vh; overflow-y: scroll;">
+              <tr *ngFor="let attempt of attempts; index as index"
+              [attr.data-bs-target]="'#exampleModal' + index"
+              data-bs-toggle="modal">
+                <td>{{index + 1}}</td>
+                <td>{{this.questions[attempt.questionId] ? this.questions[attempt.questionId].questionTitle : "DELETED QUESTION"}}</td>
+                <td>{{this.questions[attempt.questionId] ? this.questions[attempt.questionId].questionComplexity : "DELETED QUESTION"}}</td>
+                <td>{{this.questions[attempt.questionId] ? this.questions[attempt.questionId].questionCategory : "DELETED QUESTION"}}</td>
+                <td>{{attempt.language}}</td>
+                <td>{{attempt.userId2}}</td>
+              </tr>
+            </tbody>
+          </table>    
+    </div>
+    <div *ngFor="let attempt of attempts; index as index" class="modal" [id]="'exampleModal' + index" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Question attempt</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <h3>{{this.questions[attempt.questionId] ? this.questions[attempt.questionId].questionTitle : "DELETED QUESTION"}}</h3>
+            <div class="scrollable-container" style="height: 30%;" [innerHTML]="this.questions[attempt.questionId] ? this.questions[attempt.questionId].questionDescription : 'DELETED QUESTION'"></div>
+            <h5>Your solution:</h5>
+            <div class="scrollable-container" style="height: 30%;" style="background: gainsboro;">
+              <code>
+                {{this.attempt.solution}}
+              </code>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

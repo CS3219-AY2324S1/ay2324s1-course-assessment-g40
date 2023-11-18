@@ -1,0 +1,80 @@
+.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.question-column {
+  height: calc(99vh - 56px);
+  width: 25vw;
+  position: relative;
+  flex: 1;
+}
+
+.question-title {
+  align-items: start;
+}
+
+div{
+  white-space: pre-line !important;
+}
+.question-description {
+  height: calc(99vh - 86px);
+  width: 100%;
+  overflow: auto;
+  white-space: pre-line;
+
+  /* ref: css-scroll-shadows.vercel.app */
+  background: 
+    linear-gradient(#ffffff 33%, rgba(255,255,255, 0)),
+    linear-gradient(rgba(255,255,255, 0), #ffffff 66%) 0 100%,
+    radial-gradient(farthest-side at 50% 0, rgba(34,34,34, 0.5), rgba(0,0,0,0)),
+    radial-gradient(farthest-side at 50% 100%, rgba(34,34,34, 0.5), rgba(0,0,0,0)) 0 100%;
+  background-color: #ffffff;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
+  background-size: 100% 24px, 100% 24px, 100% 8px, 100% 8px;
+}
+
+.question-description::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollGradient {
+  background: 
+    linear-gradient(#ffffff 33%, rgba(255,255,255, 0)),
+    linear-gradient(rgba(255,255,255, 0), #ffffff 66%) 0 100%,
+    radial-gradient(farthest-side at 50% 0, rgba(34,34,34, 0.5), rgba(0,0,0,0)),
+    radial-gradient(farthest-side at 50% 100%, rgba(34,34,34, 0.5), rgba(0,0,0,0)) 0 100%;
+  background-color: #ffffff;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
+  background-size: 100% 24px, 100% 24px, 100% 8px, 100% 8px;
+}
+
+.collab-actions {
+  height: 20px;
+}
+
+.mat-icon-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editor-column {
+  width: 75vw;
+  position: relative;
+  flex: 3;
+}
+
+.editor-container {
+  height: calc(99vh - 56px);
+}
+
+.monaco-editor {
+  height: 100%;
+}
+
+.modal.show {
+  background-color: rgba(0,0,0,.0001) !important;
+}

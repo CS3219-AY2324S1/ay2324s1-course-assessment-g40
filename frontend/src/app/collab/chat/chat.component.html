@@ -1,0 +1,24 @@
+<!-- app-chat.component.html -->
+<div class="card" style="height: 100%;" id="chat2">
+  <div class="scrollable-container" data-mdb-perfect-scrollbar="true" style="position: relative; height: 100%">
+    <div *ngFor="let message of messageLog">
+      <div *ngIf="message[0] == '0'; then thenBlock else elseBlock"></div>
+      <ng-template #thenBlock>
+        <div class="d-flex flex-row justify-content-end mb-1 pt-1">
+          <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">{{ message[1] }}</p>
+        </div>
+      </ng-template>
+      <ng-template #elseBlock>
+        <div class="d-flex flex-row justify-content-start">
+          <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">{{ message[1] }}</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
+    <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
+      placeholder="Type message" [(ngModel)]="message" (keydown)="onKeydown($event)">
+    <button class="chat-send" mat-icon-button (click)="emitMessage()"><mat-icon>send</mat-icon></button>
+  </div>
+</div>

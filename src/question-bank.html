@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <style>
+            body {
+                font-family: arial;
+            }
+            tr {
+                display: flex;
+            }
+            th {
+                width: 20%;
+                border: 1px solid #777;
+                padding: 10px;
+                background-color: cornsilk;
+            }
+            td {
+                width: 20%;
+                border: 1px solid #777;
+                padding: 10px;
+                overflow: scroll;
+            }
+            tr:nth-of-type(even) {
+                background: #efefef;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Magic Question Machine</h1>
+        <div id="view">
+            <p>No Question Displayed Currently.</p>
+        </div>
+        <h2>Add a Question</h2>
+        <form id="questionForm">
+            <label for="qtitle">Question Title</label>
+            <input type="text" name="qtitle" id="qtitle">
+            <br>
+            <label for="qdesc">Question Description</label>
+            <textarea type="text" name="qdesc" id="qdesc"></textarea>
+            <br>
+            <label for="qcategory">Question Category</label>
+            <input type="text" name="qcategory" id="qcategory">
+            <br>
+            <label for="qcomplexity">Question Complexity</label>
+            <select name="qcomplexity" id="qcomplexity">
+                <option value="Easy" selected>Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+            <br>
+            <button type="submit">Save Question</button>
+        </form>
+        <hr>
+        <table id="table">
+        </table>
+        <script>
+            let questions = localStorage.getItem("qs")
+
+            if(!questions) {
+                questions = [];
+            } else{
+                questions = JSON.parse(questions);
+            }
+
+            function saveQuestions() {
+                localStorage.setItem("qs", JSON.stringify(questions));
+            }
+
+            function renderItemList() {
+                const itemList = document.getElementById('table');
+                itemList.innerHTML = `
+                <thead>
+                    <th>Question ID</th>
+                    <th>Question Title</th>
+                    <th>Question Description</th>
+                    <th>Question Category</th>
+                    <th>Question Complexity</th>
+                    <th>Actions</th>
+                </thead>
+                `;
+                console.log(questions)
+                questions.forEach((item, index) => {
+                    itemList.innerHTML += `
+                    <tr onclick="view(${index})">
+                        <td>${index + 1}</td>
+                        <td>${item.name}</td>
+                        <td class="desc">${item.description}</td>
+                        <td>${item.category}</td>
+                        <td>${item.complexity}</td>
+                        <td>
+                            <button class="btn" onclick="editItem(${index})">Edit</button>
+                            <button class="btn" onclick="deleteItem(${index})">Delete</button>
+                        </td>
+                    <tr>
+                    `;
+                });
+
+                // Save the questions to localStorage whenever the list is updated
+                saveQuestions();
+            }
+
+            function addItem(event) {
+                event.preventDefault();
+                let itemNameInput = document.getElementById('qtitle');
+                let itemDescriptionInput = document.getElementById('qdesc');
+                let itemCategory = document.getElementById('qcategory');
+                let itemComplexity = document.getElementById('qcomplexity');
+                const newItemName = itemNameInput.value.trim();
+                const newItemDescription = itemDescriptionInput.value.trim();
+                const newItemCategory = itemCategory.value.trim();
+                const newItemComplexity = itemComplexity.value.trim();
+
+                if (newItemName !== '' && newItemDescription !== '') {
+                    questions.push({ name: newItemName, description: newItemDescription, category: newItemCategory, complexity: newItemComplexity });
+                    itemNameInput.value = '';
+                    itemDescriptionInput.value = '';
+                    itemCategory.value = '';
+                    itemComplexity = '';
+                    renderItemList();
+                }
+            }
+
+            function view(i) {
+                const viewElem = document.getElementById('view');
+                const questionToView = questions[i];
+                viewElem.innerHTML = `
+                <h2>Current Question title: ${questionToView.name}<h4>
+                <p>Current Question description: ${questionToView.description}<p>
+                <p>Current Question Category: ${questionToView.category}<p>
+                <p>Current Question Complexity: ${questionToView.complexity}<p>
+                <p>Current Question ID: ${i + 1}<p>
+                `
+            }
+
+            function editItem(index) {
+            const updatedItemName = prompt('Edit item name:', questions[index].name);
+            const updatedItemDescription = prompt('Edit item description:', questions[index].description);
+            const updatedItemCategory = prompt('Edit item category:', questions[index].category);
+            const updatedItemComplexity = prompt('Edit item complexity', questions[index].complexity);
+
+            if (updatedItemName !== null && updatedItemDescription !== null) {
+                questions[index].name = updatedItemName;
+                questions[index].description = updatedItemDescription;
+                questions[index].category = updatedItemCategory;
+                questions[index].complexity = updatedItemComplexity;
+                renderItemList();
+            }
+        }
+
+        function deleteItem(index) {
+            const confirmDelete = confirm('Are you sure you want to delete this item?');
+            if (confirmDelete) {
+                questions.splice(index, 1);
+                renderItemList();
+            }
+        }
+
+        const questionForm = document.getElementById('questionForm');
+        questionForm.addEventListener('submit', addItem);
+
+        renderItemList();
+        </script>
+    </body>
+</html>

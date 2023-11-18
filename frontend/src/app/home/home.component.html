@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="row my-3">
+    <div class="col-xs-10 col-sm-4 col-md-3">
+      <h1>Questions</h1>
+    </div>
+    <div class="col-xs-10 col-sm-5 col-md-4 mt-1">
+      <input type="text" class="form-control" placeholder="Search..." (keyup)="updateSearchResults(search.value)" #search>
+    </div>
+  </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>Question ID</th>
+            <th>Question Title</th>
+            <th>Question Category</th>
+            <th>Question Complexity</th>
+            <th>Tags</th>
+          </tr>
+        </thead>
+        <tbody style="display: block; max-height: 90vh; overflow-y: scroll;">
+          <tr 
+          *ngFor="let question of questions; index as index"
+          [attr.data-bs-target]="'#exampleModal' + question.questionId"
+          data-bs-toggle="modal"
+          >
+            <td (click)="toggleView(index)">{{question.questionId}}</td>
+            <td>{{question.questionTitle}}</td>
+            <td>{{question.questionCategory}}</td>
+            <td>{{question.questionComplexity}}</td>
+            <td>
+              <button class="btn btn-secondary m-2" *ngFor="let tag of question.questionTags">{{tag}}</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngFor="let question of questions; index as index" class="modal" [id]="'exampleModal' + question.questionId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">View Question</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+                  <h2>{{question.questionTitle}}</h2>
+                  <button class="btn btn-secondary m-1" *ngFor="let tag of question.questionTags">{{tag}}</button>
+                  <p>Category: {{question.questionCategory}}</p>
+                  <p>Complexity: {{question.questionComplexity}}</p>
+                  <div class="scrollable-container" [innerHTML]="question.questionDescription"></div>
+                  <br>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

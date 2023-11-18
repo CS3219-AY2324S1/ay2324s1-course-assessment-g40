@@ -1,0 +1,22 @@
+table thead, table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+td::-webkit-scrollbar, th::-webkit-scrollbar, tbody::-webkit-scrollbar {
+  display: none;
+}
+
+td, th, tbody {
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
+.modal.show {
+  background-color: rgba(0,0,0,.0001) !important;
+}
+
+.scrollable-container {
+  white-space: pre-line !important;
+}
